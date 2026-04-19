@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    FILE *fin, *fout;
+
+    double inf = INFINITY;
+    int n;
+
+    // Open input file
+    fin = fopen("input.txt", "r");
+    if (fin == NULL) return 1;
+
+    // Take n from file
+    fscanf(fin, "%d", &n);
+
+    double p[n][n];  // variable size array
+
+    // Read matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (fscanf(fin, "%lf", &p[i][j]) != 1) return 1;
+            if (p[i][j] == 0) {
+                p[i][j] = inf;
+            }
+        }
+    }
+
+    fclose(fin);
+
+    // Algorithm (unchanged)
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (p[i][k] + p[k][j] < p[i][j]) {
+                    p[i][j] = p[i][k] + p[k][j];
+                }
+            }
+        }
+    }
+
+    // Open output file
+    fout = fopen("output.txt", "w");
+    if (fout == NULL) return 1;
+
+    // Write result
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (p[i][j] == inf) fprintf(fout, "inf ");
+            else fprintf(fout, "%.0f ", p[i][j]);
+        }
+        fprintf(fout, "\n");
+    }
+
+    fclose(fout);
+
+    return 0;
+}
