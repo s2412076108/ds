@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Step 1: Define the node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Step 2: Function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Step 3: Insert node at end
+void insert(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    temp->next = newNode;
+}
+
+// Step 4: Display linked list
+void display(struct Node* head) {
+    struct Node* temp = head;
+
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Step 5: Merge list B into A
+void merge(struct Node* A, struct Node* B) {
+    struct Node* temp = A;
+
+    // go to end of A
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    // connect last node of A to head of B
+    temp->next = B;
+}
+
+// Step 6: Main function
+int main() {
+    struct Node* A = NULL;
+    struct Node* B = NULL;
+
+    // Create List A
+    insert(&A, 10);
+    insert(&A, 20);
+    insert(&A, 30);
+
+    // Create List B
+    insert(&B, 40);
+    insert(&B, 50);
+    insert(&B, 60);
+
+    printf("List A: ");
+    display(A);
+
+    printf("List B: ");
+    display(B);
+
+    // Merge A and B
+    merge(A, B);
+
+    printf("Merged List: ");
+    display(A);
+
+    return 0;
+}
