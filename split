@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Create new node
+struct Node* newNode(int data) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    temp->data = data;
+    temp->next = NULL;
+    return temp;
+}
+
+// Print list
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+
+// Split function
+void splitList(struct Node* source, struct Node** front, struct Node** back) {
+    if (source == NULL) {
+        *front = NULL;
+        *back = NULL;
+        return;
+    }
+
+    struct Node* slow = source;
+    struct Node* fast = source->next;
+
+    // Move fast 2 steps and slow 1 step
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+
+    // Split here
+    *front = source;
+    *back = slow->next;
+    slow->next = NULL;
+}
+
+// Main function
+int main() {
+    struct Node* head = newNode(2);
+    head->next = newNode(3);
+    head->next->next = newNode(5);
+    head->next->next->next = newNode(7);
+    head->next->next->next->next = newNode(11);
+
+    struct Node* front = NULL;
+    struct Node* back = NULL;
+
+    splitList(head, &front, &back);
+
+    printf("Front list: ");
+    printList(front);
+
+    printf("Back list: ");
+    printList(back);
+
+    return 0;
+}
